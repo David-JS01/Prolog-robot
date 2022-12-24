@@ -1,0 +1,284 @@
+/*****************************************************************************
+
+		Copyright (c) My Company
+
+ Project:  PROLOGTRABAJO
+ FileName: PROLOGTRABAJO.PRO
+ Purpose: No description
+ Written by: Visual Prolog
+ Comments:
+******************************************************************************/
+
+include "prologtrabajo.inc"
+
+domains
+	x=integer
+	y=integer
+	q=integer
+	est=estado(x,y,q)
+	lista=est*
+	limite=integer
+predicates
+	avanzar(est, est)
+	pared(est)
+	dentroLaberinto(est)
+	/*girarD(est, est)
+	girarI(est, est)
+  	*/
+  	miembro(est,lista)
+  	resuelve(lista,est,limite,limite) /* Lista de estados, Estado destino */
+  	escribe(lista)
+  	mejorsol(integer)
+
+clauses
+	/*avanzar(estado(X, Y, Q),estado(NewX, NewY, Q)):-
+		not(pared(estado(X, Y, Q))),
+		(Q=1 -> NewX=X+1, NewY=Y);
+		(Q=2 -> NewX=X, NewY=Y-1);
+		(Q=3 -> NewX=X-1, NewY=Y);
+		(Q=4 -> NewX=X, NewY=Y+1),
+		dentroLaberinto(estado(NewX, NewY, Q)).*/
+	avanzar(estado(X, Y, 0),estado(NewX, NewY, 0)):-
+		not(pared(estado(X, Y, 0))),
+		NewX=X+1, 
+		NewY=Y,
+		dentroLaberinto(estado(NewX, NewY, 0)).
+	avanzar(estado(X, Y, 1),estado(NewX, NewY, 1)):-
+		not(pared(estado(X, Y, 1))),
+		NewX=X, 
+		NewY=Y-1,
+		dentroLaberinto(estado(NewX, NewY, 1)).
+	avanzar(estado(X, Y, 2),estado(NewX, NewY, 2)):-
+		not(pared(estado(X, Y, 2))),
+		NewX=X-1, 
+		NewY=Y,
+		dentroLaberinto(estado(NewX, NewY, 2)).
+	avanzar(estado(X, Y, 3),estado(NewX, NewY, 3)):-
+		not(pared(estado(X, Y, 3))),
+		NewX=X, 
+		NewY=Y+1,
+		dentroLaberinto(estado(NewX, NewY, 3)).
+		
+	avanzar(estado(X, Y, Q), estado(X, Y, NewQ)):-
+		NewQ=(Q-1) mod 4.
+	avanzar(estado(X, Y, Q), estado(X, Y, NewQ)):-
+		NewQ=(Q+1) mod 4.
+	
+	dentroLaberinto(estado(X, Y, _)):-
+		X<8,
+		X>0,
+		Y<7,
+		Y>0.
+	pared(estado(X, Y, Q)):-
+		X=1,
+		Y=2,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=2,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=1,
+		Y=3,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=3,
+		Q=1.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=2,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=3,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=4,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=4,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=1,
+		Y=5,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=3,
+		Y=2,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=3,
+		Y=2,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=3,
+		Y=3,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=3,
+		Y=3,
+		Q=1.
+	pared(estado(X, Y, Q)):-
+		X=3,
+		Y=4,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=3,
+		Y=4,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=5,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=2,
+		Y=5,
+		Q=1.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=1,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=2,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=3,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=3,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=4,
+		Q=1.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=4,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=4,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=4,
+		Y=5,
+		Q=1.		
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=1,
+		Q=2.
+  	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=2,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=2,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=3,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=3,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=3,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=4,
+		Q=1.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=4,
+		Q=3.
+	pared(estado(X, Y, Q)):-
+		X=5,
+		Y=5,
+		Q=1.
+	pared(estado(X, Y, Q)):-
+		X=6,
+		Y=2,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=6,
+		Y=2,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=6,
+		Y=3,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=6,
+		Y=3,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=6,
+		Y=4,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=6,
+		Y=5,
+		Q=0.
+	pared(estado(X, Y, Q)):-
+		X=7,
+		Y=2,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=7,
+		Y=3,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=7,
+		Y=4,
+		Q=2.
+	pared(estado(X, Y, Q)):-
+		X=7,
+		Y=5,
+		Q=2.
+	/*Estados repetidos */
+        miembro(E,[E|_]).
+        miembro(E,[_|T]):-
+        	miembro(E,T).
+        
+        /*Resolucion de algoritmo */
+        resuelve(Lista,Destino,_,_):-
+        	Lista=[H|T],
+        	Destino=H,
+        	escribe(Lista).
+        
+        resuelve(Lista,Destino,Lim_ant,Limite):-
+        	Lista=[H|T],
+        	not(miembro(H,T)),
+        	avanzar(H,Hfinal),
+        	Nlista=[Hfinal|Lista],
+        	Nue_Lim=Lim_ant+1,
+        	Nue_Lim<=Limite,
+        	resuelve(Nlista,Destino,Nue_Lim,Limite).
+        
+        /*Escritura de la lista */
+        escribe([]).
+        escribe([H|T]):-
+        	escribe(T),
+        	write(H,'\n').
+        	
+        mejorsol(Lim_ini):-
+        	resuelve([estado(1,4,0)],estado(7,4,0),1,Lim_ini).
+        	
+        mejorsol(Lim_ini):-
+        	Nue_lim=Lim_ini+1,
+        	mejorsol(Nue_lim).
+
+goal
+
+  mejorsol(1).
+  /*resuelve([estado(1,4,0)],estado(7,4,0),1,12).*/
